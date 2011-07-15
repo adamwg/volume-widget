@@ -1,0 +1,40 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:layout_width="match_parent"
+			  android:layout_height="match_parent"
+			  android:orientation="vertical"
+			  android:background="@drawable/widget_background">
+  
+  <TextView android:id="@+id/stream_label"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/stream_prompt" />
+
+  <RadioGroup android:id="@+id/stream_selection"
+			  android:layout_width="fill_parent"
+			  android:layout_height="wrap_content"
+			  android:orientation="vertical">
+	
+	<RadioButton android:id="@+id/stream_ringtone"
+				 android:layout_width="fill_parent"
+				 android:layout_height="wrap_content"
+				 android:text="@string/ringtone_name" />
+	<RadioButton android:id="@+id/stream_media"
+				 android:layout_width="fill_parent"
+				 android:layout_height="wrap_content"
+				 android:text="@string/media_name" />
+	<RadioButton android:id="@+id/stream_alarm"
+				 android:layout_width="fill_parent"
+				 android:layout_height="wrap_content"
+				 android:text="@string/alarm_name" />
+	<RadioButton android:id="@+id/stream_notification"
+				 android:layout_width="fill_parent"
+				 android:layout_height="wrap_content"
+				 android:text="@string/notification_name" />
+  </RadioGroup>
+
+  <Button android:id="@+id/ok_button"
+		  android:layout_width="fill_parent"
+		  android:layout_height="wrap_content"
+		  android:text="@string/ok_button_text" />
+
+</LinearLayout>
