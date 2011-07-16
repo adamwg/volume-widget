@@ -8,4 +8,10 @@
 	<string name="alarm_name">Alarm</string>
 	<string name="notification_name">Notification</string>
 	<string name="ok_button_text">Add</string>
+
+	<string name="ERR_no_selection">Please select a volume to control.</string>
+
+	<string name="prefs_base_name">ca.xvx.volume.preferences</string>
+	<string name="VOLUME_DOWN">ca.xvx.VOLUME_DOWN</string>
+	<string name="VOLUME_UP">"ca.xvx.VOLUME_UP"</string>
 </resources>

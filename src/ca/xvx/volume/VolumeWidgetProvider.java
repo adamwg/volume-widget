@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.SystemClock;
@@ -20,9 +21,6 @@ public class VolumeWidgetProvider extends AppWidgetProvider {
 
 	private HashSet<Integer> _inited;
 
-	private static final String VOLUME_DOWN = "ca.xvx.VOLUME_DOWN";
-	private static final String VOLUME_UP = "ca.xvx.VOLUME_UP";
-
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		super.onReceive(context, intent);
@@ -35,9 +33,9 @@ public class VolumeWidgetProvider extends AppWidgetProvider {
 		Log.d(TAG, "Received intent " + action);
 		if(action.equals("android.media.VOLUME_CHANGED_ACTION")) {
 			onUpdate(context, awm, awm.getAppWidgetIds(nm));
-		} else if(action.equals(VOLUME_DOWN)) {
+		} else if(action.equals(context.getString(R.string.VOLUME_DOWN))) {
 			am.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
-		} else if(action.equals(VOLUME_UP)) {
+		} else if(action.equals(context.getString(R.string.VOLUME_UP))) {
 			am.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
 		}
 	}
@@ -71,10 +69,35 @@ public class VolumeWidgetProvider extends AppWidgetProvider {
 							 int appWidgetId, int volume, int max) {
 		Log.d(TAG, "updateWidget appWidgetId=" + appWidgetId + " volume=" + String.valueOf(volume));
 
+		final String PREFS_NAME = context.getString(R.string.prefs_base_name) + String.valueOf(appWidgetId);
+		SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+		int stream = prefs.getInt("stream", -1);
+		String name;
+		switch(stream) {
+		case AudioManager.STREAM_RING:
+			name = context.getString(R.string.ringtone_name);
+			break;
+		case AudioManager.STREAM_MUSIC:
+			name = context.getString(R.string.media_name);
+			break;
+		case AudioManager.STREAM_ALARM:
+			name = context.getString(R.string.alarm_name);
+			break;
+		case AudioManager.STREAM_NOTIFICATION:
+			name = context.getString(R.string.notification_name);
+			break;
+		default:
+			name = "";
+			break;
+		}
+		
 		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+		views.setTextViewText(R.id.name, name);
 		views.setProgressBar(R.id.volume_bar, max, volume, false);
-		views.setOnClickPendingIntent(R.id.down_button, PendingIntent.getBroadcast(context, 0, new Intent(VOLUME_DOWN), 0));
-		views.setOnClickPendingIntent(R.id.up_button, PendingIntent.getBroadcast(context, 0, new Intent(VOLUME_UP), 0));
+		views.setOnClickPendingIntent(R.id.down_button,
+									  PendingIntent.getBroadcast(context, 0, new Intent(context.getString(R.string.VOLUME_DOWN)), 0));
+		views.setOnClickPendingIntent(R.id.up_button,
+									  PendingIntent.getBroadcast(context, 0, new Intent(context.getString(R.string.VOLUME_UP)), 0));
 		
 		appWidgetManager.updateAppWidget(appWidgetId, views);
 	}
