@@ -13,91 +13,114 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 
 public class VolumeWidgetProvider extends AppWidgetProvider {
 	// log tag
 	private static final String TAG = "VolumeWidgetProvider";
 
-	private HashSet<Integer> _inited;
+	private final Map<Integer, Integer> _streams = new HashMap<Integer, Integer>();
+	private static final Map<Integer, String> _streamNames = new HashMap<Integer, String>();
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		super.onReceive(context, intent);
-		
-		AppWidgetManager awm = AppWidgetManager.getInstance(context);
-		ComponentName nm = new ComponentName(context, VolumeWidgetProvider.class);
-		AudioManager am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-		
-		String action = intent.getAction();
-		Log.d(TAG, "Received intent " + action);
-		if(action.equals("android.media.VOLUME_CHANGED_ACTION")) {
-			onUpdate(context, awm, awm.getAppWidgetIds(nm));
-		} else if(action.equals(context.getString(R.string.VOLUME_DOWN))) {
-			am.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
-		} else if(action.equals(context.getString(R.string.VOLUME_UP))) {
-			am.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
+
+		if(_streamNames.isEmpty()) {
+			_streamNames.put(AudioManager.STREAM_RING, context.getString(R.string.ringtone_name));
+			_streamNames.put(AudioManager.STREAM_MUSIC, context.getString(R.string.media_name));
+			_streamNames.put(AudioManager.STREAM_ALARM, context.getString(R.string.alarm_name));
+			_streamNames.put(AudioManager.STREAM_NOTIFICATION, context.getString(R.string.notification_name));
 		}
+
+		final AppWidgetManager awm = AppWidgetManager.getInstance(context);
+		final ComponentName nm = new ComponentName(context, VolumeWidgetProvider.class);
+		final AudioManager am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+		final String action = intent.getAction();
+		final int sender = intent.getIntExtra(context.getString(R.string.AWI_EXTRA), -1);
+		Log.d(TAG, "Received intent " + action + " from " + String.valueOf(sender));
+
+		int[] appWidgetIds = awm.getAppWidgetIds(nm);
+		for(int awi : appWidgetIds) {
+			if(action.equals(context.getString(R.string.VOLUME_CHANGED))) {
+				onUpdate(context, awm, awm.getAppWidgetIds(nm));
+			} else if(action.equals(context.getString(R.string.VOLUME_DOWN))) {
+				if(sender == awi) {
+					am.adjustStreamVolume(getStream(context, awi), AudioManager.ADJUST_LOWER, 0);
+				}
+			} else if(action.equals(context.getString(R.string.VOLUME_UP))) {
+				if(sender == awi) {
+					am.adjustStreamVolume(getStream(context, awi), AudioManager.ADJUST_RAISE, 0);
+				}
+			}
+		}
+	}
+
+	private int getStream(Context context, int awi) {
+		int stream;
+		if(!_streams.containsKey(awi)) {
+			final String PREFS_NAME = context.getString(R.string.prefs_base_name) + String.valueOf(awi);
+			final SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_READABLE);
+			stream = prefs.getInt(context.getString(R.string.STREAM_PREF), -1);
+			if(stream >= 0) {
+				_streams.put(awi, stream);
+			}
+		} else {
+			stream = _streams.get(awi);
+		}
+		
+		Log.d(TAG, "App widget ID = " + String.valueOf(awi) + ", stream = " + String.valueOf(stream));
+		return stream;
 	}
 
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 		Log.d(TAG, "Volume widget updating");
 
-		AudioManager am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-		int volume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-		int max = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-		Log.d(TAG, "Volume is " + String.valueOf(volume) + " / " + String.valueOf(max));
-
-		if(_inited == null) {
-			_inited = new HashSet<Integer>();
+		int stream;
+		for(int awi : appWidgetIds) {
+			stream = getStream(context, awi);
+			updateWidget(context, appWidgetManager, awi, stream);
 		}
-		
-		final int N = appWidgetIds.length;
-		for (int i=0; i<N; i++) {
-			int appWidgetId = appWidgetIds[i];
+	}
 
-			if(!_inited.contains(appWidgetId)) {
-				_inited.add(appWidgetId);
-			}
-			
-			updateWidget(context, appWidgetManager, appWidgetId, volume, max);
+	@Override
+	public void onDeleted(Context context, int[] appWidgetIds) {
+		super.onDeleted(context, appWidgetIds);
+
+		for(int awi : appWidgetIds) {
+			_streams.remove(awi);
 		}
 	}
 
 	static void updateWidget(Context context, AppWidgetManager appWidgetManager,
-							 int appWidgetId, int volume, int max) {
-		Log.d(TAG, "updateWidget appWidgetId=" + appWidgetId + " volume=" + String.valueOf(volume));
+							 int appWidgetId, int stream) {
+		Log.d(TAG, "updateWidget appWidgetId=" + appWidgetId + " stream=" + String.valueOf(stream));
 
-		final String PREFS_NAME = context.getString(R.string.prefs_base_name) + String.valueOf(appWidgetId);
-		SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-		int stream = prefs.getInt("stream", -1);
-		String name;
-		switch(stream) {
-		case AudioManager.STREAM_RING:
-			name = context.getString(R.string.ringtone_name);
-			break;
-		case AudioManager.STREAM_MUSIC:
-			name = context.getString(R.string.media_name);
-			break;
-		case AudioManager.STREAM_ALARM:
-			name = context.getString(R.string.alarm_name);
-			break;
-		case AudioManager.STREAM_NOTIFICATION:
-			name = context.getString(R.string.notification_name);
-			break;
-		default:
-			name = "";
-			break;
+		if(stream < 0) {
+			return;
 		}
+
+		AudioManager am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+		String name = _streamNames.get(stream);
+		int volume = am.getStreamVolume(stream);
+		int max = am.getStreamMaxVolume(stream);
+		Log.d(TAG, "Volume is " + String.valueOf(volume) + " / " + String.valueOf(max));
 		
 		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 		views.setTextViewText(R.id.name, name);
 		views.setProgressBar(R.id.volume_bar, max, volume, false);
+
+		Intent upIntent = new Intent(context.getString(R.string.VOLUME_UP));
+		upIntent.putExtra(context.getString(R.string.AWI_EXTRA), appWidgetId);
+		Intent downIntent = new Intent(context.getString(R.string.VOLUME_DOWN));
+		downIntent.putExtra(context.getString(R.string.AWI_EXTRA), appWidgetId);
+		
 		views.setOnClickPendingIntent(R.id.down_button,
-									  PendingIntent.getBroadcast(context, 0, new Intent(context.getString(R.string.VOLUME_DOWN)), 0));
+									  PendingIntent.getBroadcast(context, appWidgetId, downIntent, 0));
 		views.setOnClickPendingIntent(R.id.up_button,
-									  PendingIntent.getBroadcast(context, 0, new Intent(context.getString(R.string.VOLUME_UP)), 0));
+									  PendingIntent.getBroadcast(context, appWidgetId, upIntent, 0));
 		
 		appWidgetManager.updateAppWidget(appWidgetId, views);
 	}
