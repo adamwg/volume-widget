@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">VolumeWidget</string>
+    <string name="app_name">Volume Widget</string>
     <string name="stream_prompt">Volume to Control</string>
 
 	<string name="ringtone_name">Ringtone</string>
