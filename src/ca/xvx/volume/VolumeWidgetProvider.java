@@ -13,6 +13,8 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import java.lang.reflect.Field;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,6 +54,14 @@ public class VolumeWidgetProvider extends AppWidgetProvider {
 			} else if(action.equals(context.getString(R.string.VOLUME_UP))) {
 				if(sender == awi) {
 					am.adjustStreamVolume(getStream(context, awi), AudioManager.ADJUST_RAISE, 0);
+				}
+			} else if(action.equals(context.getString(R.string.VOLUME_SET))) {
+				if(sender == awi) {
+					final int newVol = intent.getIntExtra(context.getString(R.string.VOL_EXTRA), -1);
+					Log.d(TAG, "New volume is " + String.valueOf(newVol));
+					if(newVol >= 0) {
+						am.setStreamVolume(getStream(context, awi), newVol, 0);
+					}
 				}
 			}
 		}
@@ -121,6 +131,25 @@ public class VolumeWidgetProvider extends AppWidgetProvider {
 									  PendingIntent.getBroadcast(context, appWidgetId, downIntent, 0));
 		views.setOnClickPendingIntent(R.id.up_button,
 									  PendingIntent.getBroadcast(context, appWidgetId, upIntent, 0));
+
+		for(int bn = 0; bn <= 15; bn += 1) {
+			final int newVol = (int)(((float)bn / 15f) * (float)max);
+			final Intent setIntent = new Intent(context.getString(R.string.VOLUME_SET));
+			final String buttonName = "button_" + String.valueOf(bn);
+			int id = -1;
+			try {
+				id = R.id.class.getField(buttonName).getInt(R.id.class);
+			} catch(Exception e) {
+				Log.e(TAG, "Exception getting ID");
+				continue;
+			}
+
+			setIntent.putExtra(context.getString(R.string.AWI_EXTRA), appWidgetId);
+			setIntent.putExtra(context.getString(R.string.VOL_EXTRA), newVol);
+			views.setOnClickPendingIntent(id,
+										  PendingIntent.getBroadcast(context,
+																	 appWidgetId, setIntent, 0));
+		}
 		
 		appWidgetManager.updateAppWidget(appWidgetId, views);
 	}

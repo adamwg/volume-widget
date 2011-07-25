@@ -14,7 +14,9 @@
 	<string name="prefs_base_name">ca.xvx.volume.preferences</string>
 	<string name="VOLUME_DOWN">ca.xvx.VOLUME_DOWN</string>
 	<string name="VOLUME_UP">ca.xvx.VOLUME_UP</string>
+	<string name="VOLUME_SET">ca.xvx.VOLUME_SET</string>
 	<string name="VOLUME_CHANGED">android.media.VOLUME_CHANGED_ACTION</string>
 	<string name="STREAM_PREF">stream</string>
 	<string name="AWI_EXTRA">appWidgetId</string>
+	<string name="VOL_EXTRA">volume</string>
 </resources>

@@ -10,6 +10,7 @@
 		  <action android:name="android.media.VOLUME_CHANGED_ACTION" />
 		  <action android:name="ca.xvx.VOLUME_DOWN" />
 		  <action android:name="ca.xvx.VOLUME_UP" />
+		  <action android:name="ca.xvx.VOLUME_SET" />
 		</intent-filter>
 		<meta-data android:name="android.appwidget.provider"
 				   android:resource="@xml/widget_info" />
