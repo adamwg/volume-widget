@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import java.lang.reflect.Field;
@@ -41,29 +42,19 @@ public class VolumeWidgetProvider extends AppWidgetProvider {
 		final AudioManager am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
 		final String action = intent.getAction();
 		final int sender = intent.getIntExtra(context.getString(R.string.AWI_EXTRA), -1);
+		final int stream = intent.getIntExtra(context.getString(R.string.STREAM_EXTRA), -1);
+		final int newVol = intent.getIntExtra(context.getString(R.string.VOL_EXTRA), -1);
 		Log.d(TAG, "Received intent " + action + " from " + String.valueOf(sender));
 
-		int[] appWidgetIds = awm.getAppWidgetIds(nm);
-		for(int awi : appWidgetIds) {
-			if(action.equals(context.getString(R.string.VOLUME_CHANGED))) {
-				onUpdate(context, awm, awm.getAppWidgetIds(nm));
-			} else if(action.equals(context.getString(R.string.VOLUME_DOWN))) {
-				if(sender == awi) {
-					am.adjustStreamVolume(getStream(context, awi), AudioManager.ADJUST_LOWER, 0);
-				}
-			} else if(action.equals(context.getString(R.string.VOLUME_UP))) {
-				if(sender == awi) {
-					am.adjustStreamVolume(getStream(context, awi), AudioManager.ADJUST_RAISE, 0);
-				}
-			} else if(action.equals(context.getString(R.string.VOLUME_SET))) {
-				if(sender == awi) {
-					final int newVol = intent.getIntExtra(context.getString(R.string.VOL_EXTRA), -1);
-					Log.d(TAG, "New volume is " + String.valueOf(newVol));
-					if(newVol >= 0) {
-						am.setStreamVolume(getStream(context, awi), newVol, 0);
-					}
-				}
-			}
+		if(action.equals(context.getString(R.string.VOLUME_CHANGED))) {
+			onUpdate(context, awm, awm.getAppWidgetIds(nm));
+		} else if(action.equals(context.getString(R.string.VOLUME_DOWN))) {
+			am.adjustStreamVolume(stream, AudioManager.ADJUST_LOWER, 0);
+		} else if(action.equals(context.getString(R.string.VOLUME_UP))) {
+			am.adjustStreamVolume(stream, AudioManager.ADJUST_RAISE, 0);
+		} else if(action.equals(context.getString(R.string.VOLUME_SET))) {
+			Log.d(TAG, "New volume for stream " + String.valueOf(stream) + " is " + String.valueOf(newVol));
+			am.setStreamVolume(stream, newVol, 0);
 		}
 	}
 
@@ -122,19 +113,21 @@ public class VolumeWidgetProvider extends AppWidgetProvider {
 		views.setTextViewText(R.id.name, name);
 		views.setProgressBar(R.id.volume_bar, max, volume, false);
 
-		Intent upIntent = new Intent(context.getString(R.string.VOLUME_UP));
-		upIntent.putExtra(context.getString(R.string.AWI_EXTRA), appWidgetId);
 		Intent downIntent = new Intent(context.getString(R.string.VOLUME_DOWN));
+		downIntent.putExtra(context.getString(R.string.STREAM_EXTRA), stream);
 		downIntent.putExtra(context.getString(R.string.AWI_EXTRA), appWidgetId);
-		
 		views.setOnClickPendingIntent(R.id.down_button,
-									  PendingIntent.getBroadcast(context, appWidgetId, downIntent, 0));
+									  PendingIntent.getBroadcast(context, appWidgetId, downIntent,
+																 PendingIntent.FLAG_UPDATE_CURRENT));
+
+		Intent upIntent = new Intent(context.getString(R.string.VOLUME_UP));
+		upIntent.putExtra(context.getString(R.string.STREAM_EXTRA), stream);
+		upIntent.putExtra(context.getString(R.string.AWI_EXTRA), appWidgetId);
 		views.setOnClickPendingIntent(R.id.up_button,
-									  PendingIntent.getBroadcast(context, appWidgetId, upIntent, 0));
+									  PendingIntent.getBroadcast(context, appWidgetId, upIntent,
+																 PendingIntent.FLAG_UPDATE_CURRENT));
 
 		for(int bn = 0; bn <= 15; bn += 1) {
-			final int newVol = (int)(((float)bn / 15f) * (float)max);
-			final Intent setIntent = new Intent(context.getString(R.string.VOLUME_SET));
 			final String buttonName = "button_" + String.valueOf(bn);
 			int id = -1;
 			try {
@@ -143,12 +136,20 @@ public class VolumeWidgetProvider extends AppWidgetProvider {
 				Log.e(TAG, "Exception getting ID");
 				continue;
 			}
-
-			setIntent.putExtra(context.getString(R.string.AWI_EXTRA), appWidgetId);
-			setIntent.putExtra(context.getString(R.string.VOL_EXTRA), newVol);
-			views.setOnClickPendingIntent(id,
-										  PendingIntent.getBroadcast(context,
-																	 appWidgetId, setIntent, 0));
+			
+			if(bn <= max) {
+				final Intent setIntent = new Intent(context.getString(R.string.VOLUME_SET));
+				setIntent.putExtra(context.getString(R.string.STREAM_EXTRA), stream);
+				setIntent.putExtra(context.getString(R.string.AWI_EXTRA), appWidgetId);
+				setIntent.putExtra(context.getString(R.string.VOL_EXTRA), bn);
+				final int request = appWidgetId << 16 | bn;
+				views.setOnClickPendingIntent(id,
+											  PendingIntent.getBroadcast(context,
+																		 request, setIntent,
+																		 PendingIntent.FLAG_UPDATE_CURRENT));
+			} else {
+				views.setInt(id, "setVisibility", View.GONE);
+			}
 		}
 		
 		appWidgetManager.updateAppWidget(appWidgetId, views);
