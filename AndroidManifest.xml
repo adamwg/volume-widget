@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="ca.xvx.volume"
-      android:versionCode="1"
-      android:versionName="1.0">
-    <application android:label="@string/app_name" android:icon="@drawable/icon">
-	  <receiver android:name="VolumeWidgetProvider">
-		<intent-filter>
-          <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-		  <action android:name="android.media.VOLUME_CHANGED_ACTION" />
-		  <action android:name="ca.xvx.VOLUME_DOWN" />
-		  <action android:name="ca.xvx.VOLUME_UP" />
-		  <action android:name="ca.xvx.VOLUME_SET" />
-		</intent-filter>
-		<meta-data android:name="android.appwidget.provider"
-				   android:resource="@xml/widget_info" />
-	  </receiver>
-
-	  <activity android:name="VolumeWidgetConfigure">
-		<intent-filter>
-		  <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-		</intent-filter>
-	  </activity>
-    </application>
-
+		  package="ca.xvx.volume"
+		  android:versionCode="2"
+		  android:versionName="1.1">
+  <application android:label="@string/app_name" android:icon="@drawable/icon">
+	<receiver android:name="VolumeWidgetProvider">
+	  <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+		<action android:name="android.media.VOLUME_CHANGED_ACTION" />
+		<action android:name="ca.xvx.VOLUME_DOWN" />
+		<action android:name="ca.xvx.VOLUME_UP" />
+		<action android:name="ca.xvx.VOLUME_SET" />
+	  </intent-filter>
+	  <meta-data android:name="android.appwidget.provider"
+				 android:resource="@xml/widget_info" />
+	</receiver>
+	
+	<activity android:name="VolumeWidgetConfigure">
+	  <intent-filter>
+		<action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+	  </intent-filter>
+	</activity>
+  </application>
+  
   <uses-sdk android:minSdkVersion="6" 
   			android:targetSdkVersion="8" />
   <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"></uses-permission>
