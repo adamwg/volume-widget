@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioGroup;
+import android.widget.RadioButton;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -40,6 +41,8 @@ public class VolumeWidgetConfigure extends Activity {
 		Log.d(TAG, "Configuring app widget " + String.valueOf(appWidgetId));
 		final String PREFS_NAME = this.getString(R.string.prefs_base_name) + String.valueOf(appWidgetId);
 		final RadioGroup streamSel = (RadioGroup)findViewById(R.id.stream_selection);
+		final RadioButton def = (RadioButton)findViewById(R.id.stream_ringtone);
+		def.setChecked(true);
 		final Button add = (Button)findViewById(R.id.ok_button);
 
 		add.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +71,6 @@ public class VolumeWidgetConfigure extends Activity {
 					}
 
 					if(streamid == -1) {
-						Toast.makeText(context, context.getString(R.string.ERR_no_selection), Toast.LENGTH_LONG).show();
 						return;
 					}
 					Log.d(TAG, "Widget " + String.valueOf(appWidgetId) + " stream = " + String.valueOf(streamid));

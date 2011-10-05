@@ -24,17 +24,17 @@ public class VolumeWidgetProvider extends AppWidgetProvider {
 	private static final String TAG = "VolumeWidgetProvider";
 
 	private final Map<Integer, Integer> _streams = new HashMap<Integer, Integer>();
-	private static final Map<Integer, String> _streamNames = new HashMap<Integer, String>();
+	private static final Map<Integer, Integer> _streamNames = new HashMap<Integer, Integer>();
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		super.onReceive(context, intent);
 
 		if(_streamNames.isEmpty()) {
-			_streamNames.put(AudioManager.STREAM_RING, context.getString(R.string.ringtone_name));
-			_streamNames.put(AudioManager.STREAM_MUSIC, context.getString(R.string.media_name));
-			_streamNames.put(AudioManager.STREAM_ALARM, context.getString(R.string.alarm_name));
-			_streamNames.put(AudioManager.STREAM_NOTIFICATION, context.getString(R.string.notification_name));
+			_streamNames.put(AudioManager.STREAM_RING, R.string.ring_volume_title);
+			_streamNames.put(AudioManager.STREAM_MUSIC, R.string.media_volume_title);
+			_streamNames.put(AudioManager.STREAM_ALARM, R.string.alarm_volume_title);
+			_streamNames.put(AudioManager.STREAM_NOTIFICATION, R.string.notification_volume_title);
 		}
 
 		final AppWidgetManager awm = AppWidgetManager.getInstance(context);
@@ -104,7 +104,7 @@ public class VolumeWidgetProvider extends AppWidgetProvider {
 		}
 
 		AudioManager am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-		String name = _streamNames.get(stream);
+		String name = context.getString(_streamNames.get(stream));
 		int volume = am.getStreamVolume(stream);
 		int max = am.getStreamMaxVolume(stream);
 		Log.d(TAG, "Volume is " + String.valueOf(volume) + " / " + String.valueOf(max));

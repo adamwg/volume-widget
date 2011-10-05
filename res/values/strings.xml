@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Volume Widget</string>
-    <string name="stream_prompt">Volume to Control</string>
+	<string name="dlg_ok">Add</string>
 
-	<string name="ringtone_name">Ringtone</string>
-	<string name="media_name">Media</string>
-	<string name="alarm_name">Alarm</string>
-	<string name="notification_name">Notification</string>
-	<string name="ok_button_text">Add</string>
-
-	<string name="ERR_no_selection">Please select a volume to control.</string>
+	<string name="all_volume_title">Volume</string>
+	<string name="ring_volume_title">Ringtone</string>
+	<string name="incoming_call_volume_title">Ringtone</string>
+	<string name="notification_volume_title">Notification</string>
+	<string name="media_volume_title">Media</string>
+	<string name="alarm_volume_title">Alarm</string>
 
 	<string name="prefs_base_name">ca.xvx.volume.preferences</string>
 	<string name="VOLUME_DOWN">ca.xvx.VOLUME_DOWN</string>
@@ -21,3 +19,4 @@
 	<string name="VOL_EXTRA">volume</string>
 	<string name="STREAM_EXTRA">stream</string>
 </resources>
+

@@ -7,7 +7,7 @@
   <TextView android:id="@+id/stream_label"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:text="@string/stream_prompt" />
+			android:text="@string/all_volume_title" />
 
   <RadioGroup android:id="@+id/stream_selection"
 			  android:layout_width="fill_parent"
@@ -17,24 +17,24 @@
 	<RadioButton android:id="@+id/stream_ringtone"
 				 android:layout_width="fill_parent"
 				 android:layout_height="wrap_content"
-				 android:text="@string/ringtone_name" />
+				 android:text="@string/ring_volume_title" />
 	<RadioButton android:id="@+id/stream_media"
 				 android:layout_width="fill_parent"
 				 android:layout_height="wrap_content"
-				 android:text="@string/media_name" />
+				 android:text="@string/media_volume_title" />
 	<RadioButton android:id="@+id/stream_alarm"
 				 android:layout_width="fill_parent"
 				 android:layout_height="wrap_content"
-				 android:text="@string/alarm_name" />
+				 android:text="@string/alarm_volume_title" />
 	<RadioButton android:id="@+id/stream_notification"
 				 android:layout_width="fill_parent"
 				 android:layout_height="wrap_content"
-				 android:text="@string/notification_name" />
+				 android:text="@string/notification_volume_title" />
   </RadioGroup>
 
   <Button android:id="@+id/ok_button"
 		  android:layout_width="fill_parent"
 		  android:layout_height="wrap_content"
-		  android:text="@string/ok_button_text" />
+		  android:text="@string/dlg_ok" />
 
 </LinearLayout>
