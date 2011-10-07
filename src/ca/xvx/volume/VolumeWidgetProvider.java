@@ -104,7 +104,14 @@ public class VolumeWidgetProvider extends AppWidgetProvider {
 		}
 
 		AudioManager am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-		String name = context.getString(_streamNames.get(stream));
+		String name;
+
+		try {
+			name = context.getString(_streamNames.get(stream));
+		} catch(Exception e) {
+			name = "";
+		}
+		
 		int volume = am.getStreamVolume(stream);
 		int max = am.getStreamMaxVolume(stream);
 		Log.d(TAG, "Volume is " + String.valueOf(volume) + " / " + String.valueOf(max));
