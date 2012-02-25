@@ -1,11 +1,10 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			  android:layout_width="match_parent"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			 android:layout_width="match_parent"
+			 android:layout_height="match_parent"
+			 android:padding="@dimen/widget_margin">
+<LinearLayout android:layout_width="match_parent"
 			  android:layout_height="match_parent"
 			  android:orientation="vertical"
-			  android:layout_marginLeft="10px"
-			  android:layout_marginRight="10px"
-			  android:layout_marginTop="15px"
-			  android:layout_marginBottom="15px"
 			  android:background="@drawable/widget_background">
   <TextView android:id="@+id/name"
 			android:layout_width="fill_parent"
@@ -23,6 +22,8 @@
 	<FrameLayout android:layout_width="wrap_content"
 				 android:layout_height="fill_parent"
 				 android:layout_weight="1"
+				 android:layout_marginLeft="@dimen/layout_left_pad"
+				 android:layout_marginRight="@dimen/layout_right_pad"
 				 android:id="@+id/widget_overlay">
 
 	  <ProgressBar android:id="@+id/volume_bar"
@@ -30,7 +31,7 @@
 				   android:layout_height="fill_parent" 
 				   android:minHeight="50dp"
 				   android:maxHeight="50dp"
-				   android:layout_marginRight="5dp"
+				   android:layout_marginRight="@dimen/bar_right_pad"
 				   style="?android:attr/progressBarStyleHorizontal" />
 
 	  <LinearLayout android:layout_width="match_parent"
@@ -148,3 +149,4 @@
 			android:layout_weight="0" />
   </LinearLayout>
 </LinearLayout>
+</FrameLayout>

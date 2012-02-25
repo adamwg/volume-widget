@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="widget_margin">10dp</dimen>
+  <dimen name="widget_padding">5dp</dimen>
+  <dimen name="bar_right_pad">5dp</dimen>
+  <dimen name="layout_left_pad">0dp</dimen>
+  <dimen name="layout_right_pad">0dp</dimen>  
+</resources>
