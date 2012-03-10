@@ -75,14 +75,27 @@ public class VolumeWidgetProvider extends AppWidgetProvider {
         return stream;
     }
 
+    private int getBackground(Context context, int awi) {
+        int background;
+
+        final String PREFS_NAME = context.getString(R.string.prefs_base_name) + String.valueOf(awi);
+        final SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_READABLE);
+        background = prefs.getInt(context.getString(R.string.BACKGROUND_PREF), 0xcc333333);
+
+        Log.d(TAG, "App widget ID = " + String.valueOf(awi) + ", background = " + String.format("0x%x", background));
+        return background;
+    }
+
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Log.d(TAG, "Volume widget updating");
 
         int stream;
+        int background;
         for(int awi : appWidgetIds) {
             stream = getStream(context, awi);
-            updateWidget(context, appWidgetManager, awi, stream);
+            background = getBackground(context, awi);
+            updateWidget(context, appWidgetManager, awi, stream, background);
         }
     }
 
@@ -96,7 +109,7 @@ public class VolumeWidgetProvider extends AppWidgetProvider {
     }
 
     static void updateWidget(Context context, AppWidgetManager appWidgetManager,
-                             int appWidgetId, int stream) {
+                             int appWidgetId, int stream, int background) {
         Log.d(TAG, "updateWidget appWidgetId=" + appWidgetId + " stream=" + String.valueOf(stream));
 
         if(stream < 0) {
@@ -117,6 +130,7 @@ public class VolumeWidgetProvider extends AppWidgetProvider {
         Log.d(TAG, "Volume is " + String.valueOf(volume) + " / " + String.valueOf(max));
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+        views.setInt(R.id.widget_background, "setBackgroundColor", background);
         views.setTextViewText(R.id.name, name);
         views.setProgressBar(R.id.volume_bar, max, volume, false);
 

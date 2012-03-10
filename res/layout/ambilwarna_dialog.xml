@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/ambilwarna_viewContainer"
+    android:paddingTop="@dimen/ambilwarna_spacer"
+    android:paddingRight="@dimen/ambilwarna_spacer"
+    android:paddingBottom="@dimen/ambilwarna_spacer"
+    android:paddingLeft="@dimen/ambilwarna_spacer"
+    android:clipToPadding="false"
+    android:layout_gravity="center"
+    >
+  <yuku.ambilwarna.AmbilWarnaKotak
+      android:id="@+id/ambilwarna_viewSatBri"
+      android:layout_width="@dimen/ambilwarna_hsvWidth"
+      android:layout_height="@dimen/ambilwarna_hsvHeight"
+      android:layerType="software"
+      />
+  <ImageView
+      android:id="@+id/ambilwarna_viewHue"
+      android:layout_width="@dimen/ambilwarna_hueWidth"
+      android:layout_height="@dimen/ambilwarna_hsvHeight"
+      android:layout_toRightOf="@id/ambilwarna_viewSatBri"
+      android:layout_marginLeft="@dimen/ambilwarna_spacer"
+      android:src="@drawable/ambilwarna_hue"
+      android:scaleType="fitXY"
+      />
+  <ImageView
+      android:id="@+id/ambilwarna_cursor"
+      android:layout_width="9dp"
+      android:layout_height="9dp"
+      android:src="@drawable/ambilwarna_cursor"
+      android:scaleType="matrix"
+      />
+  <ImageView
+      android:id="@+id/ambilwarna_target"
+      android:layout_width="15dp"
+      android:layout_height="15dp"
+      android:src="@drawable/ambilwarna_target"
+      android:scaleType="matrix"
+      />
+
+  <TextView android:id="@+id/ambilwarna_alphatitle"
+	    android:text="@string/prefs_background_color_alpha"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@id/ambilwarna_viewSatBri"/>
+
+  <SeekBar android:id="@+id/ambilwarna_alphaseek"
+	   android:layout_width="fill_parent"
+	   android:layout_height="wrap_content"
+	   android:indeterminate="false"
+	   android:progress="255"
+	   android:max="255"
+	   android:gravity="center"
+	   android:layout_centerHorizontal="true"
+	   android:layout_below="@id/ambilwarna_alphatitle"
+	   />
+
+  <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:id="@+id/ambilwarna_state"
+      android:orientation="horizontal"
+      android:layout_marginTop="@dimen/ambilwarna_spacer"
+      android:layout_below="@id/ambilwarna_alphaseek"
+      android:gravity="center"
+      android:layout_centerHorizontal="true"
+      >
+    <View
+	android:layout_width="60dp"
+	android:layout_height="30dp"
+	android:id="@+id/ambilwarna_warnaLama"
+	android:background="#faa"
+	/>
+    <ImageView
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:src="@drawable/ambilwarna_arrow_right"
+	android:paddingLeft="@dimen/ambilwarna_spacer"
+	android:paddingRight="@dimen/ambilwarna_spacer"
+	/>
+    <View
+	android:layout_width="60dp"
+	android:layout_height="30dp"
+	android:id="@+id/ambilwarna_warnaBaru"
+	android:background="#aaf"
+	/>
+  </LinearLayout>
+
+</RelativeLayout>
