@@ -8,6 +8,9 @@
 	<string name="notification_volume_title">Notification</string>
 	<string name="media_volume_title">Media</string>
 	<string name="alarm_volume_title">Alarm</string>
+	<string name="prefs_background_color">Background Color</string>
+	<string name="prefs_background_color_button">Change Background Color</string>
+	<string name="prefs_background_color_alpha">Alpha</string>
 
 	<string name="prefs_base_name">ca.xvx.volume.preferences</string>
 	<string name="VOLUME_DOWN">ca.xvx.VOLUME_DOWN</string>
@@ -15,6 +18,7 @@
 	<string name="VOLUME_SET">ca.xvx.VOLUME_SET</string>
 	<string name="VOLUME_CHANGED">android.media.VOLUME_CHANGED_ACTION</string>
 	<string name="STREAM_PREF">stream</string>
+	<string name="BACKGROUND_PREF">background</string>
 	<string name="AWI_EXTRA">appWidgetId</string>
 	<string name="VOL_EXTRA">volume</string>
 	<string name="STREAM_EXTRA">stream</string>

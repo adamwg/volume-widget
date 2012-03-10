@@ -1,24 +1,25 @@
 package ca.xvx.volume;
 
+import yuku.ambilwarna.AmbilWarnaDialog;
+import yuku.ambilwarna.AmbilWarnaDialog.OnAmbilWarnaListener;
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RadioGroup;
 import android.widget.RadioButton;
-import android.widget.RemoteViews;
-import android.widget.Toast;
+import android.widget.RadioGroup;
 
 public class VolumeWidgetConfigure extends Activity {
 	private static final String TAG = "VolumeWidgetConfigure";
+	
+	
+	private int mBackgroundColor = 0xCC333333;
 	
 	@Override
 	public void onCreate(Bundle icicle) {
@@ -78,10 +79,11 @@ public class VolumeWidgetConfigure extends Activity {
 					SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME,
 																				  Context.MODE_WORLD_READABLE).edit();
 					prefs.putInt(context.getString(R.string.STREAM_PREF), streamid);
+					prefs.putInt(context.getString(R.string.BACKGROUND_PREF), mBackgroundColor);
 					prefs.commit();
 
 					VolumeWidgetProvider.updateWidget(context, AppWidgetManager.getInstance(context),
-													  appWidgetId, streamid);
+													  appWidgetId, streamid, mBackgroundColor);
 					
 					Intent resultValue = new Intent();
 					resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
@@ -89,5 +91,21 @@ public class VolumeWidgetConfigure extends Activity {
 					finish();
 				}
 			});
+	}
+	
+	public void OnBackgroundColorClick(View v) {
+		Log.d(TAG, "OnBackgroundColorClick");
+		
+		AmbilWarnaDialog dialog = new AmbilWarnaDialog(this, mBackgroundColor, new OnAmbilWarnaListener() {
+	        @Override
+	        public void onOk(AmbilWarnaDialog dialog, int color) {
+	        	mBackgroundColor = color;
+	        	findViewById(R.id.current_background_color).setBackgroundColor(mBackgroundColor);
+	        }
+	                
+	        @Override
+	        public void onCancel(AmbilWarnaDialog dialog) {}
+	});
+	dialog.show();
 	}
 }
