@@ -41,26 +41,37 @@
           android:background="#33ffffff"
           android:layout_marginBottom="5dp"/>
 
-    <TextView android:layout_width="fill_parent"
-	      android:layout_height="wrap_content"
-	      android:text="@string/prefs_background_color"/>
+    <LinearLayout android:id="@+id/select_color_layout"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
 
-    <LinearLayout android:background="#ffffffff"
-	          android:layout_width="fill_parent"
-	          android:layout_height="wrap_content"
-	          android:padding="5dp"
-	          android:layout_marginLeft="5dp"
-	          android:layout_marginRight="5dp"
-	          android:orientation="vertical">
+      <CheckBox android:id="@+id/checkbox_background_color"
+                android:text="@string/prefs_change_background_color"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
 
-      <View android:id="@+id/current_background_color"
-	    android:layout_width="fill_parent"
-	    android:layout_height="48dp"
-	    android:background="#CC333333"/>
+      <TextView android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/prefs_background_color"/>
 
+      <LinearLayout android:background="#ffffffff"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:orientation="vertical">
+
+        <View android:id="@+id/current_background_color"
+              android:layout_width="fill_parent"
+              android:layout_height="48dp"
+              android:background="#CC333333"/>
+      </LinearLayout>
     </LinearLayout>
 
-    <Button android:layout_width="fill_parent"
+    <Button android:id="@+id/change_background_color_button"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/prefs_background_color_button"
             android:padding="15dp"

@@ -1,7 +1,5 @@
 package ca.xvx.volume;
 
-import yuku.ambilwarna.AmbilWarnaDialog;
-import yuku.ambilwarna.AmbilWarnaDialog.OnAmbilWarnaListener;
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
@@ -12,12 +10,19 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+
+import yuku.ambilwarna.AmbilWarnaDialog;
+import yuku.ambilwarna.AmbilWarnaDialog.OnAmbilWarnaListener;
 
 public class VolumeWidgetConfigure extends Activity {
     private static final String TAG = "VolumeWidgetConfigure";
     private int mBackgroundColor = 0xCC333333;
+    private boolean mBackgroundEnabled = false;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -42,7 +47,18 @@ public class VolumeWidgetConfigure extends Activity {
         final RadioGroup streamSel = (RadioGroup)findViewById(R.id.stream_selection);
         final RadioButton def = (RadioButton)findViewById(R.id.stream_ringtone);
         def.setChecked(true);
+        final Button changeColor = (Button)findViewById(R.id.change_background_color_button);
         final Button add = (Button)findViewById(R.id.ok_button);
+
+        final CheckBox checkbox = (CheckBox)findViewById(R.id.checkbox_background_color);
+        checkbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    final Context context = VolumeWidgetConfigure.this;
+                    mBackgroundEnabled = isChecked;
+                    changeColor.setEnabled(isChecked);
+                }
+            });
 
         add.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -77,11 +93,12 @@ public class VolumeWidgetConfigure extends Activity {
                     SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME,
                                                                                   Context.MODE_WORLD_READABLE).edit();
                     prefs.putInt(context.getString(R.string.STREAM_PREF), streamid);
-                    prefs.putInt(context.getString(R.string.BACKGROUND_PREF), mBackgroundColor);
+                    prefs.putInt(context.getString(R.string.BACKGROUND_COLOR_PREF), mBackgroundColor);
+                    prefs.putBoolean(context.getString(R.string.BACKGROUND_ENABLED_PREF), mBackgroundEnabled);
                     prefs.commit();
 
                     VolumeWidgetProvider.updateWidget(context, AppWidgetManager.getInstance(context),
-                                                      appWidgetId, streamid, mBackgroundColor);
+                                                      appWidgetId, streamid, mBackgroundEnabled, mBackgroundColor);
 
                     Intent resultValue = new Intent();
                     resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
