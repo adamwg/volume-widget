@@ -16,7 +16,8 @@
 				 android:resource="@xml/widget_info" />
 	</receiver>
 	
-	<activity android:name="VolumeWidgetConfigure">
+	<activity android:name="VolumeWidgetConfigure"
+	    android:screenOrientation="portrait">
 	  <intent-filter>
 		<action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
 	  </intent-filter>
