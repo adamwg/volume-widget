@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-		  package="ca.xvx.volume"
-		  android:versionCode="6"
-		  android:versionName="2.1">
+          package="ca.xvx.volume"
+          android:versionCode="6"
+          android:versionName="2.1">
   <application android:label="@string/all_volume_title" android:icon="@drawable/icon">
-	<receiver android:name="VolumeWidgetProvider">
-	  <intent-filter>
+    <receiver android:name="VolumeWidgetProvider">
+      <intent-filter>
         <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-		<action android:name="android.media.VOLUME_CHANGED_ACTION" />
-		<action android:name="ca.xvx.VOLUME_DOWN" />
-		<action android:name="ca.xvx.VOLUME_UP" />
-		<action android:name="ca.xvx.VOLUME_SET" />
-	  </intent-filter>
-	  <meta-data android:name="android.appwidget.provider"
-				 android:resource="@xml/widget_info" />
-	</receiver>
-	
-	<activity android:name="VolumeWidgetConfigure">
-	  <intent-filter>
-		<action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-	  </intent-filter>
-	</activity>
+        <action android:name="android.media.VOLUME_CHANGED_ACTION" />
+        <action android:name="ca.xvx.VOLUME_DOWN" />
+        <action android:name="ca.xvx.VOLUME_UP" />
+        <action android:name="ca.xvx.VOLUME_SET" />
+      </intent-filter>
+      <meta-data android:name="android.appwidget.provider"
+                 android:resource="@xml/widget_info" />
+    </receiver>
+
+    <activity android:name="VolumeWidgetConfigure">
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+      </intent-filter>
+    </activity>
   </application>
-  
-  <uses-sdk android:minSdkVersion="6" 
-  			android:targetSdkVersion="15" />
+
+  <uses-sdk android:minSdkVersion="6"
+            android:targetSdkVersion="15" />
   <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"></uses-permission>
-</manifest> 
+</manifest>
