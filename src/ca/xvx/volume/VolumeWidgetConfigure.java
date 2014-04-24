@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 public class VolumeWidgetConfigure extends Activity {
 	private static final String TAG = "VolumeWidgetConfigure";
-	
+
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
@@ -49,7 +49,7 @@ public class VolumeWidgetConfigure extends Activity {
 				@Override
 				public void onClick(View v) {
 					final Context context = VolumeWidgetConfigure.this;
-					
+
 					int selected = streamSel.getCheckedRadioButtonId();
 					int streamid;
 					switch(selected) {
@@ -82,7 +82,7 @@ public class VolumeWidgetConfigure extends Activity {
 
 					VolumeWidgetProvider.updateWidget(context, AppWidgetManager.getInstance(context),
 													  appWidgetId, streamid);
-					
+
 					Intent resultValue = new Intent();
 					resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 					setResult(RESULT_OK, resultValue);

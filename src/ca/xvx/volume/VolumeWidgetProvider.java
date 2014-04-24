@@ -70,7 +70,7 @@ public class VolumeWidgetProvider extends AppWidgetProvider {
 		} else {
 			stream = _streams.get(awi);
 		}
-		
+
 		Log.d(TAG, "App widget ID = " + String.valueOf(awi) + ", stream = " + String.valueOf(stream));
 		return stream;
 	}
@@ -111,11 +111,11 @@ public class VolumeWidgetProvider extends AppWidgetProvider {
 		} catch(Exception e) {
 			name = "";
 		}
-		
+
 		int volume = am.getStreamVolume(stream);
 		int max = am.getStreamMaxVolume(stream);
 		Log.d(TAG, "Volume is " + String.valueOf(volume) + " / " + String.valueOf(max));
-		
+
 		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 		views.setTextViewText(R.id.name, name);
 		views.setProgressBar(R.id.volume_bar, max, volume, false);
@@ -143,7 +143,7 @@ public class VolumeWidgetProvider extends AppWidgetProvider {
 				Log.e(TAG, "Exception getting ID");
 				continue;
 			}
-			
+
 			if(bn <= max) {
 				final Intent setIntent = new Intent(context.getString(R.string.VOLUME_SET));
 				setIntent.putExtra(context.getString(R.string.STREAM_EXTRA), stream);
@@ -158,7 +158,7 @@ public class VolumeWidgetProvider extends AppWidgetProvider {
 				views.setInt(id, "setVisibility", View.GONE);
 			}
 		}
-		
+
 		appWidgetManager.updateAppWidget(appWidgetId, views);
 	}
 }
